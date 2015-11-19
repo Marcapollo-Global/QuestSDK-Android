@@ -3,24 +3,27 @@ package com.marcapollo.questsdk;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.security.spec.InvalidParameterSpecException;
+import java.util.Objects;
+
 import retrofit.Call;
 
 /**
  * Created by shinechen on 11/19/15.
  */
-abstract public class ListRequestFacade<T> {
+abstract class QueryRequestFacade<T> {
 
     private static final String TAG = "ListRequestFacade";
 
-    ListRequestCallback<ListResult<T>> mCallback;
     private String mToken;
+    QueryCallback<T> mCallback;
 
-    public ListRequestFacade(String token, ListRequestCallback<ListResult<T>> callback) {
+    public QueryRequestFacade(String token, QueryCallback<T> callback) {
         mToken = token;
         mCallback = callback;
     }
 
-    abstract protected Call<ListResult<T>> performRequest();
+    abstract protected Call<T> performRequest();
 
     public void start() {
         if (TextUtils.isEmpty(mToken)) {
@@ -32,7 +35,7 @@ abstract public class ListRequestFacade<T> {
         }
 
         try {
-            performRequest().enqueue(new ListCallbackWrapper<T>(mCallback));
+            performRequest().enqueue(new QueryCallbackWrapper<T>(mCallback));
         } catch (Exception e) {
             e.printStackTrace();
             if (mCallback != null) {
