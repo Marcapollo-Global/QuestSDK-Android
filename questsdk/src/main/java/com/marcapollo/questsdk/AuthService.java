@@ -1,4 +1,4 @@
-package com.marcapollo.questsdk.auth;
+package com.marcapollo.questsdk;
 
 import retrofit.Call;
 import retrofit.http.Body;
@@ -7,7 +7,7 @@ import retrofit.http.POST;
 /**
  * Created by shinechen on 11/18/15.
  */
-public interface AuthService {
+interface AuthService {
     @POST("auth")
     Call<AuthResponse> auth(@Body AuthRequest request);
 }

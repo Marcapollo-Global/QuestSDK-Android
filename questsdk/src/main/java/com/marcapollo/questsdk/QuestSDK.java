@@ -5,11 +5,6 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.marcapollo.questsdk.auth.AuthRequest;
-import com.marcapollo.questsdk.auth.AuthResponse;
-import com.marcapollo.questsdk.auth.AuthService;
-
-import java.io.IOException;
 import java.util.UUID;
 
 import retrofit.Callback;
@@ -33,16 +28,26 @@ public class QuestSDK {
 
     private static QuestSDK sInstance;
 
+    private Context mContext;
     private String mAppKey;
     private String mUserUUID = "";
+    // Application UUID, will be available after auth
+    private String mAppUUID;
+    // Session token, will be available after auth
+    private String mToken;
 
     public static String getVersion() {
         return BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE;
     }
 
-    public static QuestSDK getInstance(Context context) {
+    public static void init(Context context, String appKey) {
+        sInstance = new QuestSDK(context);
+        sInstance.setAppKey(appKey);
+    }
+
+    public static QuestSDK getInstance() {
         if (sInstance == null) {
-            sInstance = new QuestSDK(context);
+            throw new IllegalStateException("QuestSDK is not init");
         }
         return sInstance;
     }
@@ -72,27 +77,89 @@ public class QuestSDK {
         return retrofit.create(serviceClass);
     }
 
-    public void auth() {
+    public void auth(final AuthCallback callback) {
 
         Log.d(TAG, "auth");
 
         if (TextUtils.isEmpty(mAppKey)) {
             Log.e(TAG, "App key is not set");
+            if (callback != null) {
+                callback.onFailure(new Error("App key is not set"));
+            }
             return;
         }
 
-        AuthService authService = createService(AuthService.class);
-        authService.auth(new AuthRequest(mAppKey, mUserUUID, OS)).enqueue(new Callback<AuthResponse>() {
-            @Override
-            public void onResponse(Response<AuthResponse> response) {
-                Log.d(TAG, "onResponse");
-                Log.d(TAG, response.raw().toString());
-            }
+        try {
+            AuthService authService = createService(AuthService.class);
+            authService.auth(new AuthRequest(mAppKey, mUserUUID, OS)).enqueue(new Callback<AuthResponse>() {
+                @Override
+                public void onResponse(Response<AuthResponse> response) {
+                    Log.d(TAG, "onResponse");
+                    Log.d(TAG, response.raw().toString());
 
-            @Override
-            public void onFailure(Throwable t) {
-                t.printStackTrace();
+                    AuthResponse authResponse = response.body();
+                    if (authResponse == null) {
+                        if (callback != null) {
+                            callback.onFailure(new Error("Null response"));
+                        }
+                        return;
+                    }
+
+                    mAppUUID = authResponse.getAppUUID();
+                    mToken = authResponse.getToken();
+
+                    if (TextUtils.isEmpty(mAppUUID) || TextUtils.isEmpty(mToken)) {
+                        if (callback != null) {
+                            callback.onFailure(new Error("Unexpected response"));
+                        }
+                        return;
+                    }
+
+                    if (callback != null) {
+                        callback.onComplete();
+                    }
+                }
+
+                @Override
+                public void onFailure(Throwable t) {
+                    t.printStackTrace();
+                    if (callback != null) {
+                        callback.onFailure(t);
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (callback != null) {
+                callback.onFailure(e);
             }
-        });
+        }
+    }
+
+    public void listApplicationBeacons(ListRequestCallback<ListResult<Beacon>> callback) {
+        Log.d(TAG, "listApplicationBeacons");
+
+        if (callback == null) {
+
+        }
+
+        if (TextUtils.isEmpty(mToken)) {
+            Log.e(TAG, "Token is not set");
+            if (callback != null) {
+                callback.onFailure(new Error("Token is not set"));
+            }
+            return;
+        }
+
+        AppService appService = createService(AppService.class);
+        try {
+            appService.listAppBeacons(mAppUUID, mToken).enqueue(new ListCallbackWrapper<>(callback));
+        } catch (Exception e) {
+            e.printStackTrace();
+            if (callback != null) {
+                callback.onFailure(e);
+            }
+        }
+
     }
 }

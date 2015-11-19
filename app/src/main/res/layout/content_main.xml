@@ -28,7 +28,15 @@
             android:id="@+id/btn_auth"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_margin="10dp"
             android:text="Auth"/>
+
+        <Button
+            android:id="@+id/btn_list_app_beacons"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:text="List Application Beacons"/>
     </LinearLayout>
 
 </RelativeLayout>
