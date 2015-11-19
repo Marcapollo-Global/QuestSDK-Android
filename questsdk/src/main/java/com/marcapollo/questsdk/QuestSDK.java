@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.util.UUID;
 
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.MoshiConverterFactory;
 import retrofit.Response;
@@ -139,27 +140,12 @@ public class QuestSDK {
     public void listApplicationBeacons(ListRequestCallback<ListResult<Beacon>> callback) {
         Log.d(TAG, "listApplicationBeacons");
 
-        if (callback == null) {
-
-        }
-
-        if (TextUtils.isEmpty(mToken)) {
-            Log.e(TAG, "Token is not set");
-            if (callback != null) {
-                callback.onFailure(new Error("Token is not set"));
+        new ListRequestFacade<Beacon>(mToken, callback) {
+            @Override
+            protected Call<ListResult<Beacon>> performRequest() {
+                AppService appService = createService(AppService.class);
+                return appService.listAppBeacons(mAppUUID, mToken);
             }
-            return;
-        }
-
-        AppService appService = createService(AppService.class);
-        try {
-            appService.listAppBeacons(mAppUUID, mToken).enqueue(new ListCallbackWrapper<>(callback));
-        } catch (Exception e) {
-            e.printStackTrace();
-            if (callback != null) {
-                callback.onFailure(e);
-            }
-        }
-
+        }.start();
     }
 }
