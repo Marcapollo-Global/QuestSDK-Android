@@ -137,10 +137,10 @@ public class QuestSDK {
         }
     }
 
-    public void listApplicationBeacons(ListRequestCallback<ListResult<Beacon>> callback) {
+    public void listApplicationBeacons(QueryCallback<ListResult<Beacon>> callback) {
         Log.d(TAG, "listApplicationBeacons");
 
-        new ListRequestFacade<Beacon>(mToken, callback) {
+        new QueryRequestFacade<ListResult<Beacon>>(mToken, callback) {
             @Override
             protected Call<ListResult<Beacon>> performRequest() {
                 AppService appService = createService(AppService.class);

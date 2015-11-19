@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.marcapollo.questsdk.AuthCallback;
 import com.marcapollo.questsdk.Beacon;
-import com.marcapollo.questsdk.ListRequestCallback;
+import com.marcapollo.questsdk.QueryCallback;
 import com.marcapollo.questsdk.ListResult;
 import com.marcapollo.questsdk.QuestSDK;
 
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public void onClickListAppBeacons(View view) {
         Log.d(TAG, "onClickListAppBeacons");
 
-        QuestSDK.getInstance().listApplicationBeacons(new ListRequestCallback<ListResult<Beacon>>() {
+        QuestSDK.getInstance().listApplicationBeacons(new QueryCallback<ListResult<Beacon>>() {
             @Override
             public void onComplete(ListResult<Beacon> result) {
                 Log.d(TAG, "onComplete");
