@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/show_beacon_notifications"
+        android:title="Show Notifications"/>
+    <item android:id="@+id/show_beacon_flyers"
+        android:title="Show Flyers"/>
+    <item android:id="@+id/show_beacon_stores"
+        android:title="Show Stores"/>
+</menu>

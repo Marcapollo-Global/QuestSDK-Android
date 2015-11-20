@@ -5,6 +5,11 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.marcapollo.questsdk.model.Beacon;
+import com.marcapollo.questsdk.model.Flyer;
+import com.marcapollo.questsdk.model.Notification;
+import com.marcapollo.questsdk.model.Store;
+
 import java.util.UUID;
 
 import retrofit.Call;
@@ -109,6 +114,9 @@ public class QuestSDK {
                     mAppUUID = authResponse.getAppUUID();
                     mToken = authResponse.getToken();
 
+                    Log.d(TAG, "app-uuid = " + mAppUUID);
+                    Log.d(TAG, "token = " + mToken);
+
                     if (TextUtils.isEmpty(mAppUUID) || TextUtils.isEmpty(mToken)) {
                         if (callback != null) {
                             callback.onFailure(new Error("Unexpected response"));
@@ -135,6 +143,7 @@ public class QuestSDK {
                 callback.onFailure(e);
             }
         }
+
     }
 
     public void listApplicationBeacons(QueryCallback<ListResult<Beacon>> callback) {
@@ -145,6 +154,80 @@ public class QuestSDK {
             protected Call<ListResult<Beacon>> performRequest() {
                 AppService appService = createService(AppService.class);
                 return appService.listAppBeacons(mAppUUID, mToken);
+            }
+        }.start();
+    }
+
+    public void listApplicationStores(QueryCallback<ListResult<Store>> callback) {
+        Log.d(TAG, "listApplicationStores");
+
+        new QueryRequestFacade<ListResult<Store>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Store>> performRequest() {
+                AppService appService = createService(AppService.class);
+                return appService.listAppStores(mAppUUID, mToken);
+            }
+        }.start();
+    }
+
+    public void listStoreBeacons(final String storeUUID, QueryCallback<ListResult<Beacon>> callback) {
+        Log.d(TAG, "listStoreBeacons");
+
+        new QueryRequestFacade<ListResult<Beacon>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Beacon>> performRequest() {
+                StoreService storeService = createService(StoreService.class);
+                return storeService.listStoreBeacons(storeUUID, mToken);
+            }
+        }.start();
+    }
+
+    public void listBeaconNotifications(final Beacon beacon, QueryCallback<ListResult<Notification>> callback) {
+        Log.d(TAG, "listBeaconNotifications");
+
+        new QueryRequestFacade<ListResult<Notification>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Notification>> performRequest() {
+                BeaconService beaconService = createService(BeaconService.class);
+                return beaconService.listBeaconNotifications(beacon.getUuid(),
+                        beacon.getMajor(),
+                        beacon.getMinor(),
+                        mToken);
+            }
+        }.start();
+    }
+
+    public void listBeaconFlyers(final Beacon beacon, QueryCallback<ListResult<Flyer>> callback) {
+        Log.d(TAG, "listBeaconFlyers");
+
+        new QueryRequestFacade<ListResult<Flyer>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Flyer>> performRequest() {
+                BeaconService beaconService = createService(BeaconService.class);
+                return beaconService.listBeaconFlyers(beacon.getUuid(),
+                        beacon.getMajor(),
+                        beacon.getMinor(),
+                        mToken);
+            }
+        }.start();
+    }
+
+    public void listBeaconStores(final Beacon beacon, QueryCallback<ListResult<Store>> callback) {
+        Log.d(TAG, "listBeaconStores");
+
+        new QueryRequestFacade<ListResult<Store>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Store>> performRequest() {
+                BeaconService beaconService = createService(BeaconService.class);
+                return beaconService.listBeaconStores(beacon.getUuid(),
+                        beacon.getMajor(),
+                        beacon.getMinor(),
+                        mToken);
             }
         }.start();
     }

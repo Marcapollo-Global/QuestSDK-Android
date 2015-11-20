@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.marcapollo.quest" >
+    package="com.marcapollo.quest">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,16 +9,48 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".BeaconListActivity"
+            android:label="@string/title_activity_beacon_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StoreListActivity"
+            android:label="@string/title_activity_store_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcapollo.quest.MainActivity" />
+        </activity>
+        <activity
+            android:name=".NotificationListActivity"
+            android:label="@string/title_activity_notification_list"
+            android:parentActivityName=".BeaconListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcapollo.quest.BeaconListActivity" />
+        </activity>
+        <activity
+            android:name=".FlyerListActivity"
+            android:label="@string/title_activity_flyer_list"
+            android:parentActivityName=".BeaconListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcapollo.quest.BeaconListActivity" />
         </activity>
     </application>
 
