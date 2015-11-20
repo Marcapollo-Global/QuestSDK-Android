@@ -4,4 +4,6 @@
         android:title="Show Notifications"/>
     <item android:id="@+id/show_beacon_flyers"
         android:title="Show Flyers"/>
+    <item android:id="@+id/show_beacon_stores"
+        android:title="Show Stores"/>
 </menu>

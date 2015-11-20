@@ -22,6 +22,7 @@ import com.marcapollo.questsdk.QuestSDK;
 import com.marcapollo.questsdk.model.Beacon;
 import com.marcapollo.questsdk.model.Flyer;
 import com.marcapollo.questsdk.model.Notification;
+import com.marcapollo.questsdk.model.Store;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +103,9 @@ public class BeaconListActivity extends AppCompatActivity {
             case R.id.show_beacon_flyers:
                 loadBeaconFlyers(mCurrentSelectedContextBeacon);
                 break;
+            case R.id.show_beacon_stores:
+                loadBeaconStores(mCurrentSelectedContextBeacon);
+                break;
         }
         return true;
     }
@@ -160,6 +164,31 @@ public class BeaconListActivity extends AppCompatActivity {
     private void showFlyers(List<Flyer> flyers) {
         Intent intent = new Intent(this, FlyerListActivity.class);
         intent.putParcelableArrayListExtra(FlyerListActivity.ARG_FLYER_LIST, new ArrayList<>(flyers));
+        startActivity(intent);
+    }
+
+    private void loadBeaconStores(Beacon beacon) {
+        Log.d(TAG, "loadBeaconStores: " + beacon.getUuid() + ", " + beacon.getMajor() + ", " + beacon.getMinor());
+
+        QuestSDK.getInstance().listBeaconStores(beacon, new QueryCallback<ListResult<Store>>() {
+            @Override
+            public void onComplete(ListResult<Store> result) {
+                Log.d(TAG, "onComplete loadBeaconStores");
+
+                showStores(result.getData());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "List Beacon Stores failure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void showStores(List<Store> stores) {
+        Intent intent = new Intent(this, StoreListActivity.class);
+        intent.putParcelableArrayListExtra(StoreListActivity.ARG_STORE_LIST, new ArrayList<>(stores));
         startActivity(intent);
     }
 
