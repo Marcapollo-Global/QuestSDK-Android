@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.marcapollo.questsdk.model.Beacon;
+import com.marcapollo.questsdk.model.Flyer;
+import com.marcapollo.questsdk.model.Notification;
 import com.marcapollo.questsdk.model.Store;
 
 import java.util.UUID;
@@ -178,6 +180,38 @@ public class QuestSDK {
             protected Call<ListResult<Beacon>> performRequest() {
                 StoreService storeService = createService(StoreService.class);
                 return storeService.listStoreBeacons(storeUUID, mToken);
+            }
+        }.start();
+    }
+
+    public void listBeaconNotifications(final Beacon beacon, QueryCallback<ListResult<Notification>> callback) {
+        Log.d(TAG, "listBeaconNotifications");
+
+        new QueryRequestFacade<ListResult<Notification>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Notification>> performRequest() {
+                BeaconService beaconService = createService(BeaconService.class);
+                return beaconService.listBeaconNotifications(beacon.getUuid(),
+                        beacon.getMajor(),
+                        beacon.getMinor(),
+                        mToken);
+            }
+        }.start();
+    }
+
+    public void listBeaconFlyers(final Beacon beacon, QueryCallback<ListResult<Flyer>> callback) {
+        Log.d(TAG, "listBeaconFlyers");
+
+        new QueryRequestFacade<ListResult<Flyer>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Flyer>> performRequest() {
+                BeaconService beaconService = createService(BeaconService.class);
+                return beaconService.listBeaconFlyers(beacon.getUuid(),
+                        beacon.getMajor(),
+                        beacon.getMinor(),
+                        mToken);
             }
         }.start();
     }

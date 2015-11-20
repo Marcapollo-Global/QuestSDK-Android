@@ -34,6 +34,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.marcapollo.quest.MainActivity" />
         </activity>
+        <activity
+            android:name=".NotificationListActivity"
+            android:label="@string/title_activity_notification_list"
+            android:parentActivityName=".BeaconListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcapollo.quest.BeaconListActivity" />
+        </activity>
     </application>
 
 </manifest>
