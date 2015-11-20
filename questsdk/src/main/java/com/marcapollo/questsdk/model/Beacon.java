@@ -1,4 +1,4 @@
-package com.marcapollo.questsdk;
+package com.marcapollo.questsdk.model;
 
 import com.squareup.moshi.Json;
 

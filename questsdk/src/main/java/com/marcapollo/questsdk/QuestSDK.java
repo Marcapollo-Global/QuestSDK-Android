@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.marcapollo.questsdk.model.Beacon;
+import com.marcapollo.questsdk.model.Store;
+
 import java.util.UUID;
 
 import retrofit.Call;
@@ -109,6 +112,9 @@ public class QuestSDK {
                     mAppUUID = authResponse.getAppUUID();
                     mToken = authResponse.getToken();
 
+                    Log.d(TAG, "app-uuid = " + mAppUUID);
+                    Log.d(TAG, "token = " + mToken);
+
                     if (TextUtils.isEmpty(mAppUUID) || TextUtils.isEmpty(mToken)) {
                         if (callback != null) {
                             callback.onFailure(new Error("Unexpected response"));
@@ -135,6 +141,7 @@ public class QuestSDK {
                 callback.onFailure(e);
             }
         }
+
     }
 
     public void listApplicationBeacons(QueryCallback<ListResult<Beacon>> callback) {
@@ -145,6 +152,19 @@ public class QuestSDK {
             protected Call<ListResult<Beacon>> performRequest() {
                 AppService appService = createService(AppService.class);
                 return appService.listAppBeacons(mAppUUID, mToken);
+            }
+        }.start();
+    }
+
+    public void listApplicationStores(QueryCallback<ListResult<Store>> callback) {
+        Log.d(TAG, "listApplicationStores");
+
+        new QueryRequestFacade<ListResult<Store>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Store>> performRequest() {
+                AppService appService = createService(AppService.class);
+                return appService.listAppStores(mAppUUID, mToken);
             }
         }.start();
     }
