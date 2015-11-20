@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.marcapollo.questsdk.model.Notification;
+import com.marcapollo.questsdk.model.Flyer;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class NotificationListActivity extends AppCompatActivity {
+public class FlyerListActivity extends AppCompatActivity {
 
-    private static final String TAG = "NotifListActivity";
+    private static final String TAG = "FlyerListActivity";
 
-    public static final String ARG_NOTIFICATION_LIST = "list";
+    public static final String ARG_FLYER_LIST = "list";
 
-    private List<Notification> mList;
+    private List<Flyer> mList;
 
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -36,7 +36,7 @@ public class NotificationListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notification_list);
+        setContentView(R.layout.activity_flyer_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -44,7 +44,7 @@ public class NotificationListActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mList = getIntent().getParcelableArrayListExtra(ARG_NOTIFICATION_LIST);
+        mList = getIntent().getParcelableArrayListExtra(ARG_FLYER_LIST);
         if (mList == null) {
             mList = new ArrayList<>();
         }
@@ -52,11 +52,11 @@ public class NotificationListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         mRecyclerView.addItemDecoration(new HorizontalDividerItemDecoration.Builder(this)
-                .color(Color.GRAY)
-                .size(2)
-                .build());
+            .color(Color.GRAY)
+            .size(2)
+            .build());
 
-        NotificationRecyclerViewAdapter adapter = new NotificationRecyclerViewAdapter(this, mList);
+        FlyerRecyclerViewAdapter adapter = new FlyerRecyclerViewAdapter(this, mList);
         mRecyclerView.setAdapter(adapter);
     }
 
@@ -72,45 +72,48 @@ public class NotificationListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class NotificationViewHolder extends RecyclerView.ViewHolder {
+    static class FlyerViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.notification_message)
-        TextView mMessage;
+        @Bind(R.id.flyer_content)
+        TextView mContent;
+        @Bind(R.id.flyer_text_desc)
+        TextView mTextDesc;
 
         public static View instantiateView(Context context) {
-            return LayoutInflater.from(context).inflate(R.layout.notification_list_item, null);
+            return LayoutInflater.from(context).inflate(R.layout.flyer_list_item, null);
         }
 
-        public NotificationViewHolder(View itemView) {
+        public FlyerViewHolder(View itemView) {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(Notification notification) {
-            mMessage.setText(notification.getMessage());
+        public void bindData(Flyer flyer) {
+            mContent.setText(flyer.getContent());
+            mTextDesc.setText(flyer.getTextDescription());
         }
     }
 
-    static class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationViewHolder> {
+    static class FlyerRecyclerViewAdapter extends RecyclerView.Adapter<FlyerViewHolder> {
 
         private Context mContext;
-        private List<Notification> mList;
+        private List<Flyer> mList;
 
-        public NotificationRecyclerViewAdapter(Context context, List<Notification> list) {
+        public FlyerRecyclerViewAdapter(Context context, List<Flyer> list) {
             mContext = context;
             mList = list;
         }
 
         @Override
-        public NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = NotificationViewHolder.instantiateView(mContext);
-            NotificationViewHolder viewHolder = new NotificationViewHolder(view);
+        public FlyerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = FlyerViewHolder.instantiateView(mContext);
+            FlyerViewHolder viewHolder = new FlyerViewHolder(view);
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(NotificationViewHolder holder, int position) {
+        public void onBindViewHolder(FlyerViewHolder holder, int position) {
             holder.bindData(mList.get(position));
         }
 
@@ -119,4 +122,5 @@ public class NotificationListActivity extends AppCompatActivity {
             return mList.size();
         }
     }
+
 }

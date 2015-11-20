@@ -145,6 +145,8 @@ public class BeaconListActivity extends AppCompatActivity {
             @Override
             public void onComplete(ListResult<Flyer> result) {
                 Log.d(TAG, "onComplete loadBeaconFlyers");
+
+                showFlyers(result.getData());
             }
 
             @Override
@@ -156,7 +158,9 @@ public class BeaconListActivity extends AppCompatActivity {
     }
 
     private void showFlyers(List<Flyer> flyers) {
-
+        Intent intent = new Intent(this, FlyerListActivity.class);
+        intent.putParcelableArrayListExtra(FlyerListActivity.ARG_FLYER_LIST, new ArrayList<>(flyers));
+        startActivity(intent);
     }
 
     static class BeaconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {

@@ -26,6 +26,8 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     // RecyclerView Support
     compile 'com.android.support:recyclerview-v7:23.1.0'
+    // RecyclerView item divider
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
     // View Injector
     compile 'com.jakewharton:butterknife:7.0.1'
     // Quest SDK

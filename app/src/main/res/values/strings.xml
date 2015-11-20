@@ -5,4 +5,5 @@
     <string name="title_activity_beacon_list">BeaconListActivity</string>
     <string name="title_activity_store_list">StoreListActivity</string>
     <string name="title_activity_notification_list">NotificationListActivity</string>
+    <string name="title_activity_flyer_list">FlyerListActivity</string>
 </resources>
