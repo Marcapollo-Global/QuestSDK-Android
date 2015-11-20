@@ -14,6 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.marcapollo.questsdk.ListResult;
+import com.marcapollo.questsdk.QueryCallback;
+import com.marcapollo.questsdk.QuestSDK;
+import com.marcapollo.questsdk.model.Beacon;
 import com.marcapollo.questsdk.model.Store;
 
 import java.util.ArrayList;
@@ -74,11 +78,34 @@ public class StoreListActivity extends AppCompatActivity {
 
         @Override
         public void onClickStoreItem(Store store) {
-            Intent intent = new Intent(StoreListActivity.this, BeaconListActivity.class);
-            intent.putExtra(BeaconListActivity.ARG_STORE_UUID, store.getUuid());
-            startActivity(intent);
+            loadStoreBeacons(store);
         }
     };
+
+    private void loadStoreBeacons(Store store) {
+        Log.d(TAG, "loadStoreBeacons: " + store.getUuid());
+        QuestSDK.getInstance().listStoreBeacons(store.getUuid(), new QueryCallback<ListResult<Beacon>>() {
+            @Override
+            public void onComplete(ListResult<Beacon> result) {
+                Log.d(TAG, "onComplete");
+
+                showBeaconList(result.getData());
+            }
+
+            @Override
+            public void onFailure(Throwable t) {
+                Log.e(TAG, "List Store Beacons failure");
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void showBeaconList(List<Beacon> list) {
+        Log.d(TAG, "showBeaconList");
+        Intent intent = new Intent(this, BeaconListActivity.class);
+        intent.putParcelableArrayListExtra(BeaconListActivity.ARG_BEACON_LIST, new ArrayList<>(list));
+        startActivity(intent);
+    }
 
     static class StoreViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

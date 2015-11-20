@@ -168,4 +168,17 @@ public class QuestSDK {
             }
         }.start();
     }
+
+    public void listStoreBeacons(final String storeUUID, QueryCallback<ListResult<Beacon>> callback) {
+        Log.d(TAG, "listStoreBeacons");
+
+        new QueryRequestFacade<ListResult<Beacon>>(mToken, callback) {
+
+            @Override
+            protected Call<ListResult<Beacon>> performRequest() {
+                StoreService storeService = createService(StoreService.class);
+                return storeService.listStoreBeacons(storeUUID, mToken);
+            }
+        }.start();
+    }
 }

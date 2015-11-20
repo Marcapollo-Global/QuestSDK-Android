@@ -15,14 +15,14 @@ public class Beacon implements Parcelable{
     private int major;
     @Json(name="beacon_minor")
     private int minor;
-    @Json(name="beacon_tag")
-    private String tag = "";
+    @Json(name="beacon_tag_name")
+    private String tagName = "";
 
     protected Beacon(Parcel in) {
         uuid = in.readString();
         major = in.readInt();
         minor = in.readInt();
-        tag = in.readString();
+        tagName = in.readString();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class Beacon implements Parcelable{
         dest.writeString(uuid);
         dest.writeInt(major);
         dest.writeInt(minor);
-        dest.writeString(tag);
+        dest.writeString(tagName);
     }
 
     @Override
@@ -74,11 +74,11 @@ public class Beacon implements Parcelable{
         this.minor = minor;
     }
 
-    public String getTag() {
-        return tag;
+    public String getTagName() {
+        return tagName;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setTagName(String tagName) {
+        this.tagName = tagName;
     }
 }
