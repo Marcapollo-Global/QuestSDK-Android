@@ -23,8 +23,17 @@
         <activity
             android:name=".BeaconListActivity"
             android:label="@string/title_activity_beacon_list"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".StoreListActivity"
+            android:label="@string/title_activity_store_list"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.marcapollo.quest.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

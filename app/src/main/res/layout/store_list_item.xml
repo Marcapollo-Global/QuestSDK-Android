@@ -10,19 +10,32 @@
     android:background="@drawable/list_item_bg">
 
     <TextView
-        android:id="@+id/beacon_uuid"
+        android:id="@+id/store_uuid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <TextView
-        android:id="@+id/beacon_major_minor"
+        android:id="@+id/store_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <TextView
-        android:id="@+id/beacon_tag"
+        android:id="@+id/store_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+    <TextView
+        android:id="@+id/store_website"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/store_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/store_accessories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

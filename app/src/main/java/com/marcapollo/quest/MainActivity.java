@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(ListResult<Store> result) {
                 Log.d(TAG, "onComplete");
+
+                showStoreList(result.getData());
             }
 
             @Override
@@ -117,6 +119,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "showBeaconList");
         Intent intent = new Intent(this, BeaconListActivity.class);
         intent.putParcelableArrayListExtra(BeaconListActivity.ARG_BEACON_LIST, new ArrayList<>(list));
+        startActivity(intent);
+    }
+
+    private void showStoreList(List<Store> list) {
+        Log.d(TAG, "showStoreList");
+        Intent intent = new Intent(this, StoreListActivity.class);
+        intent.putParcelableArrayListExtra(StoreListActivity.ARG_STORE_LIST, new ArrayList<>(list));
         startActivity(intent);
     }
 }

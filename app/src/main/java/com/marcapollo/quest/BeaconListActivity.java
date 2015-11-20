@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,10 @@ import butterknife.ButterKnife;
 
 public class BeaconListActivity extends AppCompatActivity {
 
+    private static final String TAG = "BeaconListActivity";
+
     public static final String ARG_BEACON_LIST = "list";
+    public static final String ARG_STORE_UUID = "store_uuid";
 
     private List<Beacon> mList;
 
@@ -51,8 +56,16 @@ public class BeaconListActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        BeaconListAdapter adapter = new BeaconListAdapter(this, mList);
-        mRecyclerView.setAdapter(adapter);
+        if (mList.size() > 0) {
+            BeaconListAdapter adapter = new BeaconListAdapter(this, mList);
+            mRecyclerView.setAdapter(adapter);
+            return;
+        }
+
+        String storeUUID = getIntent().getStringExtra(ARG_STORE_UUID);
+        if (!TextUtils.isEmpty(storeUUID)) {
+
+        }
     }
 
     @Override
@@ -67,7 +80,13 @@ public class BeaconListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class BeaconViewHolder extends RecyclerView.ViewHolder {
+    private void loadStoreBeacons(String storeUUID) {
+
+    }
+
+    static class BeaconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private static final String TAG = "BeaconViewHolder";
 
         @Bind(R.id.beacon_uuid)
         TextView mBeaconUUID;
@@ -83,12 +102,19 @@ public class BeaconListActivity extends AppCompatActivity {
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
         }
 
         public void bindData(Beacon beacon) {
             mBeaconUUID.setText(beacon.getUuid());
             mBeaconMajorMinor.setText(String.format("(%d, %d)", beacon.getMajor(), beacon.getMinor()));
             mBeaconTag.setText(beacon.getTag());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, "onClick");
         }
     }
 
