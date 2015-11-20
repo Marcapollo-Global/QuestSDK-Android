@@ -1,15 +1,37 @@
 package com.marcapollo.quest;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.BinderThread;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.marcapollo.questsdk.model.Beacon;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 public class BeaconListActivity extends AppCompatActivity {
+
+    public static final String ARG_BEACON_LIST = "list";
+
+    private List<Beacon> mList;
+
+    @Bind(R.id.recycler_view)
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +41,18 @@ public class BeaconListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mList = getIntent().getParcelableArrayListExtra(ARG_BEACON_LIST);
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
+
+        ButterKnife.bind(this);
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        BeaconListAdapter adapter = new BeaconListAdapter(this, mList);
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -31,5 +65,58 @@ public class BeaconListActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    static class BeaconViewHolder extends RecyclerView.ViewHolder {
+
+        @Bind(R.id.beacon_uuid)
+        TextView mBeaconUUID;
+        @Bind(R.id.beacon_major_minor)
+        TextView mBeaconMajorMinor;
+        @Bind(R.id.beacon_tag)
+        TextView mBeaconTag;
+
+        public static View instantiateView(Context context) {
+            return LayoutInflater.from(context).inflate(R.layout.beacon_list_item, null);
+        }
+        public BeaconViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
+        }
+
+        public void bindData(Beacon beacon) {
+            mBeaconUUID.setText(beacon.getUuid());
+            mBeaconMajorMinor.setText(String.format("(%d, %d)", beacon.getMajor(), beacon.getMinor()));
+            mBeaconTag.setText(beacon.getTag());
+        }
+    }
+
+    static class BeaconListAdapter extends RecyclerView.Adapter<BeaconViewHolder> {
+
+        private Context mContext;
+        private List<Beacon> mList;
+
+        public BeaconListAdapter(Context context, List<Beacon> list) {
+            mContext = context;
+            mList = list;
+        }
+
+        @Override
+        public BeaconViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = BeaconViewHolder.instantiateView(mContext);
+            BeaconViewHolder viewHolder = new BeaconViewHolder(view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(BeaconViewHolder holder, int position) {
+            holder.bindData(mList.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
     }
 }

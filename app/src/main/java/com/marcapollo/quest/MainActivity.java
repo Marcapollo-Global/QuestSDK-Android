@@ -16,6 +16,9 @@ import com.marcapollo.questsdk.ListResult;
 import com.marcapollo.questsdk.QuestSDK;
 import com.marcapollo.questsdk.model.Store;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(ListResult<Beacon> result) {
                 Log.d(TAG, "onComplete");
 
-                showBeaconList();
+                showBeaconList(result.getData());
             }
 
             @Override
@@ -110,9 +113,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void showBeaconList() {
+    private void showBeaconList(List<Beacon> list) {
         Log.d(TAG, "showBeaconList");
         Intent intent = new Intent(this, BeaconListActivity.class);
+        intent.putParcelableArrayListExtra(BeaconListActivity.ARG_BEACON_LIST, new ArrayList<>(list));
         startActivity(intent);
     }
 }
