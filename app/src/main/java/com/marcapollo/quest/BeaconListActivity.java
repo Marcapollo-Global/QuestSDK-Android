@@ -36,12 +36,12 @@ public class BeaconListActivity extends AppCompatActivity {
 
     public static final String ARG_BEACON_LIST = "list";
 
-    private List<Beacon> mList;
+    protected List<Beacon> mList;
 
     @Bind(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    private Beacon mCurrentSelectedContextBeacon;
+    protected Beacon mCurrentSelectedContextBeacon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +52,19 @@ public class BeaconListActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mList = getIntent().getParcelableArrayListExtra(ARG_BEACON_LIST);
-        if (mList == null) {
-            mList = new ArrayList<>();
-        }
-
         ButterKnife.bind(this);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
+        List<Beacon> data = getIntent().getParcelableArrayListExtra(ARG_BEACON_LIST);
+        setData(data);
+    }
+
+    protected void setData(List<Beacon> data) {
+        mList = data;
+        if (mList == null) {
+            mList = new ArrayList<>();
+        }
         BeaconListAdapter adapter = new BeaconListAdapter(this, mList, mBeaconViewHolderListener);
         mRecyclerView.setAdapter(adapter);
     }
@@ -86,7 +90,11 @@ public class BeaconListActivity extends AppCompatActivity {
         public void onCreateContextMenu(Beacon beacon, ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Action");
 
-            getMenuInflater().inflate(R.menu.beacon_context_menu, menu);
+            if (beacon.getMajor() > 0 && beacon.getMinor() > 0) {
+                getMenuInflater().inflate(R.menu.beacon_context_menu, menu);
+            } else {
+                getMenuInflater().inflate(R.menu.scan_beacon_context_menu, menu);
+            }
 
             mCurrentSelectedContextBeacon = beacon;
         }
@@ -105,6 +113,9 @@ public class BeaconListActivity extends AppCompatActivity {
                 break;
             case R.id.show_beacon_stores:
                 loadBeaconStores(mCurrentSelectedContextBeacon);
+                break;
+            case R.id.scan_beacon:
+                scanBeacon(mCurrentSelectedContextBeacon);
                 break;
         }
         return true;
@@ -192,6 +203,12 @@ public class BeaconListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private void scanBeacon(Beacon beacon) {
+        Intent intent = new Intent(this, ScanBeaconListActivity.class);
+        intent.putExtra(ScanBeaconListActivity.ARG_TARGET_TO_SCAN, beacon);
+        startActivity(intent);
+    }
+
     static class BeaconViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
         private static final String TAG = "BeaconViewHolder";
@@ -202,6 +219,8 @@ public class BeaconListActivity extends AppCompatActivity {
         TextView mBeaconMajorMinor;
         @Bind(R.id.beacon_tag)
         TextView mBeaconTag;
+        @Bind(R.id.beacon_extra)
+        TextView mBeaconExtra;
 
         private Beacon mItem;
         private BeaconViewHolderListener mListener;
@@ -224,6 +243,13 @@ public class BeaconListActivity extends AppCompatActivity {
             mBeaconUUID.setText(beacon.getUuid());
             mBeaconMajorMinor.setText(String.format("(%d, %d)", beacon.getMajor(), beacon.getMinor()));
             mBeaconTag.setText(beacon.getTagName());
+
+            // If beacon is from ranging result.
+            if (beacon.getRssi() != 0) {
+                mBeaconExtra.setText(String.format("rssi=%d, distance=%f", beacon.getRssi(), beacon.getDistance()));
+            } else {
+                mBeaconExtra.setText("");
+            }
         }
 
         @Override

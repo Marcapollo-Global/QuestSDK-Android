@@ -10,6 +10,8 @@ import com.marcapollo.questsdk.model.Flyer;
 import com.marcapollo.questsdk.model.Notification;
 import com.marcapollo.questsdk.model.Store;
 
+import org.altbeacon.beacon.BeaconManager;
+
 import java.util.UUID;
 
 import retrofit.Call;
@@ -28,19 +30,21 @@ public class QuestSDK {
     private static final String SHARED_PREF_NAME = "QuestSDK";
     private static final String SHARED_PREF_KEY_USER_UUID = "user_uuid";
 
-    private static final String BASE_URL = "http://10.10.10.103:3000/v1/";
+    private static final String BASE_URL = "http://192.168.1.103:3000/v1/";
 
     private static final String OS = "android";
 
     private static QuestSDK sInstance;
 
-    private Context mContext;
     private String mAppKey;
     private String mUserUUID = "";
     // Application UUID, will be available after auth
     private String mAppUUID;
     // Session token, will be available after auth
     private String mToken;
+
+    // Beacon monitor
+    private BeaconMonitor mBeaconMonitor;
 
     public static String getVersion() {
         return BuildConfig.VERSION_NAME + "." + BuildConfig.VERSION_CODE;
@@ -59,7 +63,7 @@ public class QuestSDK {
     }
 
     private QuestSDK(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("QuestSDK", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 
         mUserUUID = sharedPreferences.getString(SHARED_PREF_KEY_USER_UUID, "");
         if (TextUtils.isEmpty(mUserUUID)) {
@@ -68,6 +72,8 @@ public class QuestSDK {
         }
 
         Log.d(TAG, "user uuid = " + mUserUUID);
+
+        mBeaconMonitor = new BeaconMonitor(context);
     }
 
     public void setAppKey(String appKey) {
@@ -230,5 +236,17 @@ public class QuestSDK {
                         mToken);
             }
         }.start();
+    }
+
+    public void startMonitoring(final Beacon beacon) {
+        mBeaconMonitor.startMonitoring(beacon);
+    }
+
+    public void stopMonitoring(Beacon beacon) {
+        mBeaconMonitor.stopMonitoring(beacon);
+    }
+
+    public void setBeaconMonitorConsumer(BeaconMonitorConsumer consumer) {
+        mBeaconMonitor.setConsumer(consumer);
     }
 }

@@ -18,11 +18,22 @@ public class Beacon implements Parcelable{
     @Json(name="beacon_tag_name")
     private String tagName = "";
 
+    private int rssi;
+    private double distance;
+
+    public Beacon(String uuid, int major, int minor) {
+        this.uuid = uuid;
+        this.major = major;
+        this.minor = minor;
+    }
+
     protected Beacon(Parcel in) {
         uuid = in.readString();
         major = in.readInt();
         minor = in.readInt();
         tagName = in.readString();
+        rssi = in.readInt();
+        distance = in.readDouble();
     }
 
     @Override
@@ -31,6 +42,8 @@ public class Beacon implements Parcelable{
         dest.writeInt(major);
         dest.writeInt(minor);
         dest.writeString(tagName);
+        dest.writeInt(rssi);
+        dest.writeDouble(distance);
     }
 
     @Override
@@ -80,5 +93,21 @@ public class Beacon implements Parcelable{
 
     public void setTagName(String tagName) {
         this.tagName = tagName;
+    }
+
+    public int getRssi() {
+        return rssi;
+    }
+
+    public void setRssi(int rssi) {
+        this.rssi = rssi;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }

@@ -3,6 +3,7 @@
     package="com.marcapollo.quest">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -24,6 +25,10 @@
             android:name=".BeaconListActivity"
             android:label="@string/title_activity_beacon_list"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ScanBeaconListActivity"
+            android:label="@string/title_activity_scan_beacon_list"
+            android:parentActivityName=".BeaconListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".StoreListActivity"
