@@ -1,3 +1,3 @@
 # README #
 
-The beacon detection is based on [Android Beacon Library](http://altbeacon.github.io/android-beacon-library/index.html)
+The beacon detection depends on [Android Beacon Library](http://altbeacon.github.io/android-beacon-library/index.html)
