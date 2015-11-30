@@ -14,6 +14,10 @@ class AuthResponse {
     private String token;
     @Json(name = "expiration_date")
     private String expirationDate;
+    @Json(name = "latest_sdk")
+    private SDKInfo latestSDK;
+    @Json(name = "urls")
+    private ContentURLs urls;
 
     public String getAppId() {
         return appId;
@@ -29,5 +33,13 @@ class AuthResponse {
 
     public String getExpirationDate() {
         return expirationDate;
+    }
+
+    public SDKInfo getLatestSDK() {
+        return latestSDK;
+    }
+
+    public ContentURLs getUrls() {
+        return urls;
     }
 }

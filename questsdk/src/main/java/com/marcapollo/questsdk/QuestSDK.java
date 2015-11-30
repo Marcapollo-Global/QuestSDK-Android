@@ -30,7 +30,7 @@ public class QuestSDK {
     private static final String SHARED_PREF_NAME = "QuestSDK";
     private static final String SHARED_PREF_KEY_USER_UUID = "user_uuid";
 
-    private static final String BASE_URL = "http://192.168.1.103:3000/v1/";
+    private static final String BASE_URL = "http://10.10.10.91:3000/v1/";
 
     private static final String OS = "android";
 
@@ -42,6 +42,12 @@ public class QuestSDK {
     private String mAppUUID;
     // Session token, will be available after auth
     private String mToken;
+    // Beacon flyer image content URL
+    private String mBeaconFlyerImgURL;
+    // Beacon flyer audio content URL
+    private String mBeaconFlyerAudioURL;
+    // Beacon flyer video content thumbnail URL
+    private String mBeaconFlyerVideoImgURL;
 
     // Beacon monitor
     private BeaconMonitor mBeaconMonitor;
@@ -117,6 +123,13 @@ public class QuestSDK {
                         return;
                     }
 
+                    if (authResponse.getLatestSDK() != null &&
+                            !authResponse.getLatestSDK().getVersion().contentEquals(getVersion())) {
+                        Log.w(TAG, "!!!Attention!!! The latest QuestSDK version is " + authResponse.getLatestSDK().getVersion());
+                        Log.w(TAG, "!!!Attention!!! Your current QuestSDK version is " + getVersion());
+                        Log.w(TAG, "!!!Attention!!! For more details, please visit" + authResponse.getLatestSDK().getHomepage());
+                    }
+
                     mAppUUID = authResponse.getAppUUID();
                     mToken = authResponse.getToken();
 
@@ -128,6 +141,14 @@ public class QuestSDK {
                             callback.onFailure(new Error("Unexpected response"));
                         }
                         return;
+                    }
+
+                    if (authResponse.getUrls() != null) {
+                        mBeaconFlyerImgURL = authResponse.getUrls().getBeaconFlyerImg();
+                        mBeaconFlyerAudioURL = authResponse.getUrls().getBeaconFlyerAudio();
+                        mBeaconFlyerVideoImgURL = authResponse.getUrls().getBeaconFlyerVideoImg();
+
+                        Log.d(TAG, "beacon flyer img URL = " + mBeaconFlyerImgURL);
                     }
 
                     if (callback != null) {
@@ -248,5 +269,38 @@ public class QuestSDK {
 
     public void setBeaconMonitorConsumer(BeaconMonitorConsumer consumer) {
         mBeaconMonitor.setConsumer(consumer);
+    }
+
+    /**
+     * Returns beacon flyer image content URL
+     * @return Beacon flyer image content URL
+     */
+    public String getBeaconFlyerImgURL() {
+        if (mBeaconFlyerImgURL == null) {
+            mBeaconFlyerImgURL = "";
+        }
+        return mBeaconFlyerImgURL;
+    }
+
+    /**
+     * Returns beacon flyer audio content URL
+     * @return Beacon flyer audio content URL
+     */
+    public String getBeaconFlyerAudioURL() {
+        if (mBeaconFlyerAudioURL == null) {
+            mBeaconFlyerAudioURL = "";
+        }
+        return mBeaconFlyerAudioURL;
+    }
+
+    /**
+     * Returns beacon flyer video content thumbnail URL
+     * @return Beacon flyer vidoe content thumbnail URL
+     */
+    public String getBeaconFlyerVideoImgURL() {
+        if (mBeaconFlyerVideoImgURL == null) {
+            mBeaconFlyerVideoImgURL = "";
+        }
+        return mBeaconFlyerVideoImgURL;
     }
 }

@@ -11,9 +11,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.marcapollo.questsdk.model.Flyer;
+import com.squareup.picasso.Picasso;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import java.util.ArrayList;
@@ -78,6 +80,8 @@ public class FlyerListActivity extends AppCompatActivity {
         TextView mContent;
         @Bind(R.id.flyer_text_desc)
         TextView mTextDesc;
+        @Bind(R.id.flyer_img)
+        ImageView mImage;
 
         public static View instantiateView(Context context) {
             return LayoutInflater.from(context).inflate(R.layout.flyer_list_item, null);
@@ -90,8 +94,11 @@ public class FlyerListActivity extends AppCompatActivity {
         }
 
         public void bindData(Flyer flyer) {
-            mContent.setText(flyer.getContent());
             mTextDesc.setText(flyer.getTextDescription());
+            mContent.setText(flyer.getContent());
+            if (flyer.getType() == Flyer.FlyerTypeImage) {
+                Picasso.with(itemView.getContext()).load(flyer.getContent()).into(mImage);
+            }
         }
     }
 
