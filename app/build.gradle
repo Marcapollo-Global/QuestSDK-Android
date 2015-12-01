@@ -20,11 +20,12 @@ android {
     }
 }
 
-repositories {
-    maven {
-        url 'https://dl.bintray.com/shine-chen/maven'
-    }
-}
+// Remove this once we link the repository to jCenter.
+//repositories {
+//    maven {
+//        url 'https://dl.bintray.com/shine-chen/maven'
+//    }
+//}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,7 +42,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Quest SDK
     compile project(':questsdk')
-    compile ('com.marcapollo.questsdk:questsdk:1.0.2@aar') {
-        transitive = true
-    }
+//    compile ('com.marcapollo.questsdk:questsdk:1.0.2@aar') {
+//        transitive = true
+//    }
 }
