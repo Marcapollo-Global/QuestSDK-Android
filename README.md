@@ -4,9 +4,9 @@
 
 ##  Getting Started ##
 
-Add lines to build.gradle
+Add lines to build.gradle:
 
-1. This block will be removed once we link the repository to jCenter
+- This block will be removed once we link the repository to jCenter
 ```gradle
 
 // Remove this once we link the repository to jCenter.
@@ -17,7 +17,7 @@ repositories {
 }
 ```
 
-2. Add to dependencies.
+- Add to dependencies.
 ```gradle
 dependencies {
 	compile ('com.marcapollo.questsdk:questsdk:1.0.2@aar') {
