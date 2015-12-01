@@ -13,7 +13,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -24,8 +25,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
-    compile project(':questsdk')
-
+    // RecyclerView Support
+    compile 'com.android.support:recyclerview-v7:23.1.0'
+    // RecyclerView item divider
+    compile 'com.yqritc:recyclerview-flexibledivider:1.2.6'
     // View Injector
     compile 'com.jakewharton:butterknife:7.0.1'
+    // Image loader
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    // Quest SDK
+    compile project(':questsdk')
 }

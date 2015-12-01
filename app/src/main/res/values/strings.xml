@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Quest</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Quest Demo</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_beacon_list">BeaconListActivity</string>
+    <string name="title_activity_scan_beacon_list">ScanBeaconListActivity</string>
+    <string name="title_activity_store_list">StoreListActivity</string>
+    <string name="title_activity_notification_list">NotificationListActivity</string>
+    <string name="title_activity_flyer_list">FlyerListActivity</string>
 </resources>
