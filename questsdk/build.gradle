@@ -2,9 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group = 'com.marcapollo.questsdk' // Change this to match your package name
-version = '1.0.1' // Change this to match your version number
-
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -12,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 0
-        versionName "0.1"
+        versionCode 2
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -39,6 +36,10 @@ dependencies {
     // Android beacon library
     compile 'org.altbeacon:android-beacon-library:2+'
 }
+
+// Specify POM details
+group = 'com.marcapollo.questsdk' // Change this to match your package name
+version = '1.0.2' // Change this to match your version number
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -70,10 +71,10 @@ bintray {
         name = 'com.marcapollo.questsdk'
 
         version {
-            name = '0.1.0-test'
+            name = '1.0.2-test'
             desc = 'Test upload'
             released  = new Date()
-            vcsTag = '0.1.0'
+            vcsTag = '1.0.2'
         }
 
         licenses = ['Apache-2.0']
