@@ -1,4 +1,9 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.marcapollo.questsdk' // Change this to match your package name
+version = '1.0.1' // Change this to match your version number
 
 android {
     compileSdkVersion 23
@@ -33,4 +38,47 @@ dependencies {
     compile 'com.squareup.moshi:moshi:1.0.0'
     // Android beacon library
     compile 'org.altbeacon:android-beacon-library:2+'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    pkg {
+        repo = 'maven'
+        name = 'com.marcapollo.questsdk'
+
+        version {
+            name = '0.1.0-test'
+            desc = 'Test upload'
+            released  = new Date()
+            vcsTag = '0.1.0'
+        }
+
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/shine-chen/QuestSDK-Android'
+        websiteUrl = 'https://github.com/shine-chen/QuestSDK-Android'
+    }
+    configurations = ['archives']
 }
