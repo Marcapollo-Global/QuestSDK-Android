@@ -95,6 +95,10 @@ public class QuestSDK {
         return retrofit.create(serviceClass);
     }
 
+    /**
+     * Authorization and get session access token.
+     * @param callback
+     */
     public void auth(final AuthCallback callback) {
 
         Log.d(TAG, "auth");
@@ -173,6 +177,10 @@ public class QuestSDK {
 
     }
 
+    /**
+     * List beacons registered under current application
+     * @param callback
+     */
     public void listApplicationBeacons(QueryCallback<ListResult<Beacon>> callback) {
         Log.d(TAG, "listApplicationBeacons");
 
@@ -185,6 +193,10 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * List stores registered under current application
+     * @param callback
+     */
     public void listApplicationStores(QueryCallback<ListResult<Store>> callback) {
         Log.d(TAG, "listApplicationStores");
 
@@ -198,6 +210,11 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * List beacons in a store
+     * @param storeUUID Store UUID
+     * @param callback
+     */
     public void listStoreBeacons(final String storeUUID, QueryCallback<ListResult<Beacon>> callback) {
         Log.d(TAG, "listStoreBeacons");
 
@@ -211,6 +228,11 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * List notifications of a beacon
+     * @param beacon
+     * @param callback
+     */
     public void listBeaconNotifications(final Beacon beacon, QueryCallback<ListResult<Notification>> callback) {
         Log.d(TAG, "listBeaconNotifications");
 
@@ -227,6 +249,11 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * List flyers of a beacon
+     * @param beacon
+     * @param callback
+     */
     public void listBeaconFlyers(final Beacon beacon, QueryCallback<ListResult<Flyer>> callback) {
         Log.d(TAG, "listBeaconFlyers");
 
@@ -243,6 +270,11 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * List store(s) that the given beacon belongs to.
+     * @param beacon
+     * @param callback
+     */
     public void listBeaconStores(final Beacon beacon, QueryCallback<ListResult<Store>> callback) {
         Log.d(TAG, "listBeaconStores");
 
@@ -259,14 +291,26 @@ public class QuestSDK {
         }.start();
     }
 
+    /**
+     * Start monitoring of a given beacon or a group of beacons.
+     * @param beacon    If only UUID is specified, monitoring all the beacons with the given UUID.
+     */
     public void startMonitoring(final Beacon beacon) {
         mBeaconMonitor.startMonitoring(beacon);
     }
 
+    /**
+     * Stop monitoring of a given beacon or a group of beacons.
+     * @param beacon
+     */
     public void stopMonitoring(Beacon beacon) {
         mBeaconMonitor.stopMonitoring(beacon);
     }
 
+    /**
+     * Set consumer that the beacon monitor result will be delivered to.
+     * @param consumer
+     */
     public void setBeaconMonitorConsumer(BeaconMonitorConsumer consumer) {
         mBeaconMonitor.setConsumer(consumer);
     }

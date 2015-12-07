@@ -9,16 +9,34 @@ import com.squareup.moshi.Json;
  * Created by shinechen on 11/19/15.
  */
 public class Beacon implements Parcelable{
+    /**
+     * Beacon UUID
+     */
     @Json(name="beacon_uuid")
     private String uuid ="";
     @Json(name="beacon_major")
+    /**
+     * Major number
+     */
     private int major;
     @Json(name="beacon_minor")
+    /**
+     * Minor number
+     */
     private int minor;
+    /**
+     * Beacon tag name
+     */
     @Json(name="beacon_tag_name")
     private String tagName = "";
 
+    /**
+     * Detected signal strength, will be set for beacons from monitor result.
+     */
     private int rssi;
+    /**
+     * Estimated distance in meters, will be set for beacons from monitor result.
+     */
     private double distance;
 
     public Beacon(String uuid, int major, int minor) {
