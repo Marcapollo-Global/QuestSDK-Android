@@ -24,7 +24,12 @@ dependencies {
 		transitive = true
 	}
 }
+```
 
+- Add permissions to application AndroidManifest.xml
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 ```
 
 ## Example ##
