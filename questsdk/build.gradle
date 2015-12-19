@@ -9,7 +9,7 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 23
-        versionCode 2
+        versionCode 3
         versionName "1.0"
     }
     buildTypes {
@@ -17,6 +17,9 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    lintOptions{
+        abortOnError false
     }
 }
 
@@ -39,7 +42,7 @@ dependencies {
 
 // Specify POM details
 group = 'com.marcapollo.questsdk' // Change this to match your package name
-version = '1.0.2' // Change this to match your version number
+version = '1.0.3' // Change this to match your version number
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -71,10 +74,10 @@ bintray {
         name = 'com.marcapollo.questsdk'
 
         version {
-            name = '1.0.2-test'
-            desc = 'Test upload'
+            name = '1.0.3'
+            desc = 'Quest SDK 1.0.3'
             released  = new Date()
-            vcsTag = '1.0.2'
+            vcsTag = '1.0.3'
         }
 
         licenses = ['Apache-2.0']
