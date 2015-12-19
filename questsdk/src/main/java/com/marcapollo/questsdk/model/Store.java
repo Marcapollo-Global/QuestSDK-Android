@@ -32,9 +32,9 @@ public class Store implements Parcelable {
     @Json(name="store_headerimg")
     private String headerImg = "";
     @Json(name="store_longitude")
-    private double longitude;
+    private Double longitude;
     @Json(name="store_latitude")
-    private double latitude;
+    private Double latitude;
     @Json(name="store_wifi")
     private int wifi;
     @Json(name="store_icg")
@@ -77,8 +77,8 @@ public class Store implements Parcelable {
         dest.writeString(logo);
         dest.writeString(listImg);
         dest.writeString(headerImg);
-        dest.writeDouble(longitude);
-        dest.writeDouble(latitude);
+        dest.writeDouble(getLongitude());
+        dest.writeDouble(getLatitude());
         dest.writeInt(wifi);
         dest.writeInt(icg);
         dest.writeInt(chat);
@@ -147,10 +147,16 @@ public class Store implements Parcelable {
     }
 
     public double getLongitude() {
+        if (longitude == null) {
+            longitude = new Double(0);
+        }
         return longitude;
     }
 
     public double getLatitude() {
+        if (latitude == null) {
+            latitude = new Double(0);
+        }
         return latitude;
     }
 
