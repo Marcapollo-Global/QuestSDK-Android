@@ -30,7 +30,8 @@ public class QuestSDK {
     private static final String SHARED_PREF_NAME = "QuestSDK";
     private static final String SHARED_PREF_KEY_USER_UUID = "user_uuid";
 
-    private static final String BASE_URL = "https://labsdk.quest-platform.com/v1/";
+//    private static final String BASE_URL = "https://labsdk.quest-platform.com/v1/";
+    private static final String BASE_URL = "http://192.168.2.101:3000/v1/";
 
     private static final String OS = "android";
 
