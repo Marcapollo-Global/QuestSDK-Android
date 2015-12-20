@@ -9,4 +9,5 @@ import java.util.Collection;
  */
 public interface BeaconMonitorConsumer {
     void didRangeBeacons(Collection<Beacon> collection);
+    void didDetectNearestBeacon(Beacon nearestBeacon);
 }
