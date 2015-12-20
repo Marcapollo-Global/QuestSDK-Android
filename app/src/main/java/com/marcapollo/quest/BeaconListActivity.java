@@ -60,7 +60,7 @@ public class BeaconListActivity extends AppCompatActivity {
         setData(data);
     }
 
-    protected void setData(List<Beacon> data) {
+    private void setData(List<Beacon> data) {
         mList = data;
         if (mList == null) {
             mList = new ArrayList<>();
@@ -85,10 +85,14 @@ public class BeaconListActivity extends AppCompatActivity {
         void onCreateContextMenu(Beacon beacon, ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo);
     }
 
-    private BeaconViewHolderListener mBeaconViewHolderListener = new BeaconViewHolderListener() {
+    protected BeaconViewHolderListener mBeaconViewHolderListener = new BeaconViewHolderListener() {
         @Override
         public void onCreateContextMenu(Beacon beacon, ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
             menu.setHeaderTitle("Action");
+
+            if (beacon == null) {
+                return;
+            }
 
             if (beacon.getMajor() > 0 && beacon.getMinor() > 0) {
                 getMenuInflater().inflate(R.menu.beacon_context_menu, menu);
@@ -223,7 +227,7 @@ public class BeaconListActivity extends AppCompatActivity {
         TextView mBeaconExtra;
 
         private Beacon mItem;
-        private BeaconViewHolderListener mListener;
+        protected BeaconViewHolderListener mListener;
 
         public static View instantiateView(Context context) {
             return LayoutInflater.from(context).inflate(R.layout.beacon_list_item, null);
@@ -239,6 +243,14 @@ public class BeaconListActivity extends AppCompatActivity {
 
         public void bindData(Beacon beacon) {
             mItem = beacon;
+
+            if (beacon == null) {
+                mBeaconUUID.setText("Unknown");
+                mBeaconMajorMinor.setText("N/A");
+                mBeaconTag.setText("");
+                mBeaconExtra.setText("N/A");
+                return;
+            }
 
             mBeaconUUID.setText(beacon.getUuid());
             mBeaconMajorMinor.setText(String.format("(%d, %d)", beacon.getMajor(), beacon.getMinor()));

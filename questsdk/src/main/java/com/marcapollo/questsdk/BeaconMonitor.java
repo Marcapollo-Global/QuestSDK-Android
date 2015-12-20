@@ -138,6 +138,8 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
 
         final List<Beacon> outList = new ArrayList<>();
 
+        Beacon nearestBeacon = null;
+
         for (org.altbeacon.beacon.Beacon alBeacon : collection) {
             Log.d(TAG, "beacon = " + alBeacon + " rssi=" + alBeacon.getRssi());
 
@@ -147,13 +149,20 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
             beacon.setRssi(alBeacon.getRssi());
             beacon.setDistance(alBeacon.getDistance());
             outList.add(beacon);
+
+            if (nearestBeacon == null || nearestBeacon.getDistance() > beacon.getDistance()) {
+                nearestBeacon = beacon;
+            }
         }
+
+        final Beacon outNearestBeacon = nearestBeacon;
 
         mMainHandler.post(new Runnable() {
             @Override
             public void run() {
                 if (mConsumer != null && mConsumer.get() != null) {
                     mConsumer.get().didRangeBeacons(outList);
+                    mConsumer.get().didDetectNearestBeacon(outNearestBeacon);
                 }
             }
         });
