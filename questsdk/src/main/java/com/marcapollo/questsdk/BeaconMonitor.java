@@ -164,8 +164,7 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
             beacon.setProximity(distanceToProximity(adjustedDistance));
             outList.add(beacon);
 
-            if (nearestBeacon == null ||
-                    Proximity.levelCompatator.compare(nearestBeacon.getProximity(), beacon.getProximity()) > 0) {
+            if (nearestBeacon == null || nearestBeacon.getDistance() > beacon.getDistance()) {
                 nearestBeacon = beacon;
             }
         }
