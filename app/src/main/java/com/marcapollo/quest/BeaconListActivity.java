@@ -258,7 +258,8 @@ public class BeaconListActivity extends AppCompatActivity {
 
             // If beacon is from ranging result.
             if (beacon.getRssi() != 0) {
-                mBeaconExtra.setText(String.format("rssi=%d, distance=%f", beacon.getRssi(), beacon.getDistance()));
+                mBeaconExtra.setText(String.format("rssi=%d, distance=%f, proximity=%d",
+                        beacon.getRssi(), beacon.getDistance(), beacon.getProximity().getLevel()));
             } else {
                 mBeaconExtra.setText("");
             }

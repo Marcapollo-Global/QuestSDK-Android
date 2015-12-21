@@ -8,6 +8,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.marcapollo.questsdk.model.Beacon;
+import com.marcapollo.questsdk.model.Proximity;
 
 import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
@@ -16,10 +17,13 @@ import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.altbeacon.beacon.distance.CurveFittedDistanceCalculator;
+import org.altbeacon.beacon.distance.DistanceCalculator;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,22 +34,30 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
 
     private static final String TAG = "BeaconMonitor";
 
+    private static final long FOREGROUND_SCAN_PERIOD = 3000L;
+
     private BeaconManager mBeaconManager;
     private Context mAppContext;
     private boolean mServiceConnected;
     private Handler mMainHandler;
+
+    private DistanceCalculator mDistanceCalculator;
 
     private WeakReference<BeaconMonitorConsumer> mConsumer;
 
     public BeaconMonitor(Context context) {
         mAppContext = context.getApplicationContext();
         mMainHandler = new Handler(context.getMainLooper());
+
+        mDistanceCalculator = new CurveFittedDistanceCalculator(0.89976, 7.7095, 0.111);
+
         mBeaconManager = BeaconManager.getInstanceForApplication(mAppContext);
         mBeaconManager.getBeaconParsers()
                 .add(new BeaconParser().setBeaconLayout("m:0-3=4c000215,i:4-19,i:20-21,i:22-23,p:24-24"));
         mBeaconManager.bind(this);
         mBeaconManager.setMonitorNotifier(this);
         mBeaconManager.setRangeNotifier(this);
+        mBeaconManager.setForegroundScanPeriod(FOREGROUND_SCAN_PERIOD);
     }
 
     public void setConsumer(BeaconMonitorConsumer consumer) {
@@ -147,7 +159,9 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
                     alBeacon.getId2().toInt(),
                     alBeacon.getId3().toInt());
             beacon.setRssi(alBeacon.getRssi());
-            beacon.setDistance(alBeacon.getDistance());
+            double adjustedDistance = mDistanceCalculator.calculateDistance(alBeacon.getTxPower(), alBeacon.getRssi());
+            beacon.setDistance(adjustedDistance);
+            beacon.setProximity(distanceToProximity(adjustedDistance));
             outList.add(beacon);
 
             if (nearestBeacon == null || nearestBeacon.getDistance() > beacon.getDistance()) {
@@ -166,5 +180,18 @@ class BeaconMonitor implements BeaconConsumer, MonitorNotifier, RangeNotifier {
                 }
             }
         });
+    }
+
+    public Proximity distanceToProximity(double distance) {
+        if (distance < 1.0) {
+            return Proximity.IMMEDIATE;
+        }
+        if (distance >= 1.0 && distance < 3.0) {
+            return Proximity.NEAR;
+        }
+        if (distance >= 3.0) {
+            return Proximity.FAR;
+        }
+        return Proximity.UNKNOWN;
     }
 }

@@ -33,11 +33,15 @@ public class Beacon implements Parcelable{
     /**
      * Detected signal strength, will be set for beacons from monitor result.
      */
-    private int rssi;
+    transient private int rssi;
     /**
      * Estimated distance in meters, will be set for beacons from monitor result.
      */
-    private double distance;
+    transient private double distance;
+    /**
+     * Estimated proximity, corresponding to iOS definitions.
+     */
+    transient private Proximity proximity;
 
     public Beacon(String uuid, int major, int minor) {
         this.uuid = uuid;
@@ -127,5 +131,19 @@ public class Beacon implements Parcelable{
 
     public void setDistance(double distance) {
         this.distance = distance;
+    }
+
+    /**
+     * Estimated proximity, corresponding to iOS definitions.
+     */
+    public Proximity getProximity() {
+        if (proximity == null) {
+            proximity = Proximity.UNKNOWN;
+        }
+        return proximity;
+    }
+
+    public void setProximity(Proximity proximity) {
+        this.proximity = proximity;
     }
 }
