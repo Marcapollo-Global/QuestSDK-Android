@@ -137,6 +137,9 @@ public class Beacon implements Parcelable{
      * Estimated proximity, corresponding to iOS definitions.
      */
     public Proximity getProximity() {
+        if (proximity == null) {
+            proximity = Proximity.UNKNOWN;
+        }
         return proximity;
     }
 

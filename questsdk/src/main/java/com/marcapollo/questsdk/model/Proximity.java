@@ -16,6 +16,10 @@ public enum  Proximity implements Comparable<Proximity> {
         this.level = level;
     }
 
+    public int getLevel() {
+        return this.level;
+    }
+
     public static Comparator<Proximity> levelCompatator = new Comparator<Proximity>() {
         @Override
         public int compare(Proximity lhs, Proximity rhs) {
