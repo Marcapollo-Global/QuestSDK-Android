@@ -12,7 +12,7 @@ Add lines to build.gradle:
 // Remove this once we link the repository to jCenter.
 repositories {
     maven {
-        url 'https://dl.bintray.com/shine-chen/maven'
+        url 'https://dl.bintray.com/marcapollo/maven'
     }
 }
 ```
@@ -20,7 +20,7 @@ repositories {
 - Add to dependencies.
 ```gradle
 dependencies {
-	compile ('com.marcapollo.questsdk:questsdk:1.0.3@aar') {
+	compile ('com.marcapollo.questsdk:questsdk:1.0.5@aar') {
 		transitive = true
 	}
 }
