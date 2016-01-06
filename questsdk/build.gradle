@@ -75,14 +75,14 @@ bintray {
 
         version {
             name = '1.0.5'
-            desc = 'Quest SDK 1.0.5'
+            desc = 'Quest-Platform SDK 1.0.5'
             released  = new Date()
             vcsTag = '1.0.5'
         }
 
         licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/shine-chen/QuestSDK-Android'
-        websiteUrl = 'https://github.com/shine-chen/QuestSDK-Android'
+        vcsUrl = 'https://github.com/Marcapollo-Global/QuestSDK-Android'
+        websiteUrl = 'https://github.com/Marcapollo-Global/QuestSDK-Android'
     }
     configurations = ['archives']
 }

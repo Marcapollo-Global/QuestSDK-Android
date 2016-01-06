@@ -26,7 +26,7 @@ android {
 // Remove this once we link the repository to jCenter.
 //repositories {
 //    maven {
-//        url 'https://dl.bintray.com/shine-chen/maven'
+//        url 'https://dl.bintray.com/marcapollo/maven'
 //    }
 //}
 
